@@ -1,76 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- GLOBAL DEVICE DETECTION ---
-    // A flag to check if the device is touch-enabled. This helps decide whether to apply tap or hover logic.
-    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-
-
-    // --- WOW FACTOR: CUSTOM CURSOR (CORRECTED) ---
+    // --- WOW FACTOR: CUSTOM CURSOR ---
     const cursor = document.querySelector('.custom-cursor');
-    const isFinePointer = window.matchMedia('(pointer: fine)').matches;
-
-    if (cursor && isFinePointer) {
+    if (cursor) {
+        if ('ontouchstart' in window) { cursor.style.display = 'none'; }
         window.addEventListener('mousemove', e => {
-            requestAnimationFrame(() => {
-                cursor.style.top = `${e.clientY}px`;
-                cursor.style.left = `${e.clientX}px`;
-            });
+            cursor.style.top = e.clientY + 'px';
+            cursor.style.left = e.clientX + 'px';
         });
-
-        const interactiveElements = 'a, button, .service-item, .portrait, .map-point-dot, .person-card-revised, .map-point';
-        document.querySelectorAll(interactiveElements).forEach(el => {
+        document.querySelectorAll('a, button, .service-item, .portrait, .map-point').forEach(el => {
             el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
             el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
         });
-
-    } else if (cursor) {
-        cursor.style.display = 'none';
     }
 
-
-    // --- MOBILE TAP-TO-ACTIVATE FIX ---
-    // This new block of code makes the hover-based sections work with a single tap on mobile.
-    if (isTouchDevice) {
-        // A function to handle the "tap-once-to-activate, tap-again-to-follow-link" logic.
-        function makeTappable(selector) {
-            const elements = document.querySelectorAll(selector);
-            if (!elements.length) return;
-
-            elements.forEach(element => {
-                element.addEventListener('click', function(e) {
-                    // Check if the element is already active
-                    const wasActive = this.classList.contains('is-active');
-                    
-                    // First, remove 'is-active' from all other elements of the same type
-                    elements.forEach(el => el.classList.remove('is-active'));
-
-                    // If it wasn't already active, make it active and prevent the link from being followed
-                    if (!wasActive) {
-                        this.classList.add('is-active');
-                        e.preventDefault(); // This is key: stops the link on the first tap
-                    }
-                    // If it WAS active, the class is now removed, and the second tap will proceed as a normal link click.
-                });
-            });
-
-            // Add a listener to the document to close active elements when tapping elsewhere
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest(selector)) {
-                    elements.forEach(el => el.classList.remove('is-active'));
-                }
-            });
-        }
-
-        // Apply the tappable logic to all three problematic sections
-        makeTappable('.service-item'); // For "Our Services" on the Home page
-        makeTappable('.person-card-revised'); // For "Our People" on the About page
-        makeTappable('.map-point'); // For "We Work Around the World" on the About page
-    }
-
-
-    // --- EXISTING FUNCTIONALITY (Leave As Is) ---
-    
-    // Page Transitions
+    // --- WOW FACTOR: PAGE TRANSITIONS ---
     const transitionOverlay = document.querySelector('.page-transition');
     if (transitionOverlay) {
         transitionOverlay.style.transform = 'scaleY(0)';
@@ -78,32 +22,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.querySelectorAll('a').forEach(link => {
         const href = link.getAttribute('href');
-        if (!href) return;
-        const isLocal = (href.startsWith('/') || href.includes('.html')) && !href.startsWith('#');
+        const isLocal = href && (href.startsWith('/') || href.includes('.html')) && !href.startsWith('#');
         const isNotNewTab = link.getAttribute('target') !== '_blank';
-        
         if (isLocal && isNotNewTab) {
             link.addEventListener('click', e => {
-                const parentIsTappable = e.target.closest('.service-item, .person-card-revised, .map-point');
-                if (isTouchDevice && parentIsTappable && !parentIsTappable.classList.contains('is-active')) {
-                    // The makeTappable function already handles preventDefault, so we let it do its job.
-                    return;
-                }
-                
                 e.preventDefault();
                 if (transitionOverlay) {
                     transitionOverlay.style.transform = 'scaleY(1)';
                     transitionOverlay.style.transformOrigin = 'bottom';
                     setTimeout(() => { window.location = href; }, 800);
-                } else {
-                    window.location = href;
-                }
+                } else { window.location = href; }
             });
         }
     });
-
-    // Scroll Animations
-    const animatedElements = document.querySelectorAll('.fade-up, .image-reveal-container');
+    
+    // --- ADVANCED SCROLL ANIMATIONS ---
+    const animatedElements = document.querySelectorAll('.fade-up, .image-reveal-container, .timeline-container, .gallery-item');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -113,16 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, { threshold: 0.1 });
     animatedElements.forEach(el => observer.observe(el));
-
-    // Stagger Animations
     document.querySelectorAll('.stagger-container').forEach(container => {
         const children = container.querySelectorAll('.fade-up');
-        children.forEach((child, index) => {
-            child.style.setProperty('--stagger-index', index);
-        });
+        children.forEach((child, index) => { child.style.setProperty('--stagger-index', index); });
     });
 
-    // Hero Text Animation
+    // --- ANIMATED HERO TEXT ---
     const heroTitle = document.querySelector('.hero h1');
     if (heroTitle) {
         const text = heroTitle.textContent;
@@ -136,15 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Header Scroll Effect
+    // --- SCROLLED HEADER EFFECT ---
     const header = document.querySelector('header');
-    if (header) {
-        window.addEventListener('scroll', () => {
-            header.classList.toggle('scrolled', window.scrollY > 50);
-        });
-    }
+    if (header) { window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 50); }); }
 
-    // Responsive Navigation (Hamburger Menu)
+    // --- RESPONSIVE NAVIGATION ---
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('nav ul');
     if (hamburger && navMenu) {
@@ -154,4 +80,60 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- HOME: INTERACTIVE SERVICES (FIXED) ---
+    const serviceItems = document.querySelectorAll('.service-item');
+    const serviceBackgrounds = document.querySelectorAll('.services-background');
+    if(serviceItems.length > 0 && serviceBackgrounds.length > 0) {
+        serviceItems.forEach((item, index) => {
+            item.addEventListener('mouseenter', () => {
+                serviceItems.forEach(i => i.classList.remove('is-active'));
+                serviceBackgrounds.forEach(bg => bg.classList.remove('is-active'));
+                item.classList.add('is-active');
+                if(serviceBackgrounds[index]) {
+                    serviceBackgrounds[index].classList.add('is-active');
+                }
+            });
+        });
+    }
+
+    // --- HOME: TESTIMONIAL SHOWCASE (REDESIGNED) ---
+    const portraits = document.querySelectorAll('.portrait');
+    const quotes = document.querySelectorAll('.testimonial-quote');
+    if (portraits.length > 0 && quotes.length > 0) {
+        portraits.forEach((portrait, index) => {
+            portrait.addEventListener('click', () => {
+                portraits.forEach(p => p.classList.remove('is-active'));
+                quotes.forEach(q => q.classList.remove('is-active'));
+                portrait.classList.add('is-active');
+                if (quotes[index]) {
+                    quotes[index].classList.add('is-active');
+                }
+            });
+        });
+    }
+
+    // --- CONTACT FORM VALIDATION ---
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const isNameValid = validateField('name', 'name-error', val => val.trim() !== '');
+            const isEmailValid = validateField('email', 'email-error', val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val));
+            const isSubjectValid = validateField('subject', 'subject-error', val => val.trim() !== '');
+            const isMessageValid = validateField('message', 'message-error', val => val.trim().length >= 20);
+            if (isNameValid && isEmailValid && isSubjectValid && isMessageValid) {
+                alert('Thank you for your message! It has been sent.');
+                contactForm.submit();
+            }
+        });
+        function validateField(fieldId, errorId, validationFn) {
+            const field = document.getElementById(fieldId);
+            const error = document.getElementById(errorId);
+            if (!field) return false;
+            const isValid = validationFn(field.value);
+            if (error) { error.style.display = isValid ? 'none' : 'block'; }
+            field.style.borderColor = isValid ? 'var(--color-subtle)' : 'var(--color-primary)';
+            return isValid;
+        }
+    }
 });
