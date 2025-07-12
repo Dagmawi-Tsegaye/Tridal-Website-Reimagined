@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Tridal Architectural Firm</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="contact-styles.css">
+</head>
+<body>
+    <div class="custom-cursor"></div>
+    <div class="page-transition"></div>
+
+    <header>
+        <nav>
+            <div class="logo"><a href="index.html">TRIDAL</a></div>
+            <ul>
+                <li><a href="about.html">About</a></li>
+                <li><a href="process.html">Process</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger">
+                <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="container" style="padding-top: 10rem;">
+             <div class="contact-layout-grid">
+                <div class="contact-info fade-up">
+                    <h1 class="main-title">Let's Create Together.</h1>
+                    <p>We're always excited to hear about new ideas. Whether you have a question, a proposal, or just want to say hello, we're here to listen and ready to help build your vision.</p>
+                     <div class="contact-details">
+                        <p><strong>Address:</strong> Bole Road, Addis Ababa, Ethiopia</p>
+                        <p><strong>Phone:</strong> <a href="tel:+251911234567">+251 911 234 567</a></p>
+                        <p><strong>Email:</strong> <a href="mailto:contact@tridal.com">contact@tridal.com</a></p>
+                    </div>
+                </div>
+                <div class="contact-form-wrapper fade-up">
+                    <form id="contactForm" novalidate>
+                        <h3 class="form-title">Send a Direct Message</h3>
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" placeholder="Your Name" required>
+                            <p class="error-message" id="name-error">Name is required.</p>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" placeholder="Your Email" required>
+                            <p class="error-message" id="email-error">Please enter a valid email.</p>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="subject" name="subject" placeholder="Subject" required>
+                            <p class="error-message" id="subject-error">Subject is required.</p>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" name="message" placeholder="Your Message" required minlength="20" rows="5"></textarea>
+                            <p class="error-message" id="message-error">Message needs to be at least 20 characters.</p>
+                        </div>
+                        <button type="submit" class="cta-button">
+                            <span class="button-text">Send Message</span>
+                            <span class="button-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <section class="map-section fade-up">
+            <iframe
+                class="map-embed"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.352014796359!2d38.76682101478657!3d9.031535993519842!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85779c5cb53b%3A0x29b11d99671518b3!2sFriendship%20Park!5e0!3m2!1sen!2set!4v1657882194530!5m2!1sen!2set"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                 <div class="footer-about"><h3>TRIDAL</h3><p>Designing with purpose, building the future.</p></div>
+                <div class="footer-links"><h3>Navigate</h3><ul><li><a href="about.html">About</a></li><li><a href="process.html">Process</a></li><li><a href="projects.html">Projects</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+                <div class="footer-social"><h3>Connect</h3><ul><li><a href="https://twitter.com" target="_blank">Twitter</a></li><li><a href="https://facebook.com" target="_blank">Facebook</a></li><li><a href="https://instagram.com" target="_blank">Instagram</a></li></ul></div>
+            </div>
+            <div class="footer-bottom"><p>© 2025 Tridal Architectural Firm, Addis Ababa. All Rights Reserved.</p></div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+    <script src="contact-script.js"></script>
+</body>
+</html>

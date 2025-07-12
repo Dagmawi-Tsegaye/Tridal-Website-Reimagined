@@ -1,0 +1,126 @@
+/*
+ * =========================================
+ * STYLESHEET FOR: ALL PROJECT DETAIL PAGES
+ * =========================================
+ * This file contains shared styles for the
+ * project detail pages (Peneris, Pelikan, etc.)
+ * =========================================
+ */
+
+/*
+ * The hero section at the top of the page.
+ */
+.project-hero {
+    padding-top: 10rem; /* Adds significant space at the top to clear the fixed header. */
+    text-align: center; /* Centers all content within the hero. */
+}
+
+/* The main heading of the project. */
+.project-hero h1 {
+    margin-bottom: 1rem;
+}
+
+/* The main descriptive paragraph. */
+.project-hero > .container > p {
+    max-width: 70ch; /* Limits the width of the paragraph for better readability. */
+    margin: 0 auto 2rem auto; /* Centers the paragraph and adds space below it. */
+}
+
+/*
+ * Container for the project details (Type, Completed, Scope).
+ */
+.project-details {
+    display: flex; /* Uses flexbox to lay out the details. */
+    justify-content: center; /* Horizontally centers the detail items. */
+    gap: 2rem; /* Adds space between each detail item. */
+    flex-wrap: wrap; /* Allows items to wrap onto the next line on small screens. */
+    background-color: var(--color-surface); /* Adds a dark background. */
+    padding: 1.5rem; /* Adds spacing inside the container. */
+    border-radius: 8px; /* Applies rounded corners. */
+    margin-top: 3rem; /* Adds space above the details box. */
+}
+
+/* Each individual detail item (e.g., "Type: Luxury Residential"). */
+.project-details p {
+    margin: 0;
+    color: var(--color-text);
+}
+
+
+/*
+ * The wrapper for the entire project image gallery.
+ */
+.project-gallery-wrapper {
+    padding-top: 4rem; /* Reduces the top padding to bring it closer to the hero. */
+}
+
+/*
+ * Container for each gallery item (image + text).
+ */
+.gallery-item {
+    display: grid; /* Uses grid for a two-column layout. */
+    grid-template-columns: 1fr; /* Default to a single column on mobile. */
+    gap: 3rem; /* Space between the image and text. */
+    align-items: center; /* Vertically aligns the text with the image. */
+    margin-bottom: 6rem; /* Adds significant space between gallery items. */
+}
+
+/* On larger screens, alternate the image and text position for a dynamic layout. */
+@media (min-width: 992px) {
+    .gallery-item {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    /* For every second gallery item, reverse the column order. */
+    .gallery-item:nth-child(even) .gallery-image {
+        grid-column: 2; /* Moves the image to the second column. */
+        grid-row: 1; /* Ensures it stays in the first row. */
+    }
+}
+
+
+/* The heading within the gallery text block. */
+.gallery-text h3 {
+    margin-bottom: 1rem;
+}
+
+/*
+ * =========================================
+ * ANIMATION FIX: FASTER & SMOOTHER IMAGE REVEAL
+ * (Applied to the gallery images)
+ * =========================================
+ */
+.image-reveal-container {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-surface);
+}
+
+.image-reveal-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-primary);
+    transform: scaleX(1);
+    transform-origin: right;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.image-reveal-container.visible::after {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition-delay: 0.1s;
+}
+
+.image-reveal-container img {
+    opacity: 0;
+    transform: scale(1.1);
+    transition: opacity 0.5s ease-out 0.2s, transform 0.5s ease-out 0.2s;
+}
+
+.image-reveal-container.visible img {
+    opacity: 1;
+    transform: scale(1);
+}

@@ -1,0 +1,139 @@
+/*
+ * =========================================
+ * STYLESHEET FOR: MAIN PROJECTS PAGE
+ * =========================================
+ * This file contains styles for the project
+ * listing grid on projects.html.
+ * =========================================
+ */
+
+/*
+ * This is the main container for the grid of project cards.
+ */
+.project-grid-container {
+    display: grid; /* Establishes a grid layout. */
+    /* Creates a responsive grid with columns that are at least 280px wide. */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem; /* Sets the spacing between the project cards. */
+}
+
+/*
+ * Styles for each individual project card.
+ */
+.project-card {
+    background: var(--color-surface); /* Sets the dark card background color. */
+    border-radius: 12px; /* Applies rounded corners. */
+    overflow: hidden; /* Hides any content that spills outside the rounded corners. */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Smooth transition for the hover effect. */
+    border: 1px solid var(--color-subtle); /* Adds a subtle border. */
+}
+
+/*
+ * Creates a "lift" effect when the user hovers over a card.
+ */
+.project-card:hover {
+    transform: translateY(-10px); /* Moves the card up slightly. */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2); /* Adds a more prominent shadow. */
+}
+
+/*
+ * The link element that wraps the card content.
+ */
+.project-card a {
+    text-decoration: none; /* Removes the default underline from the link. */
+    color: inherit; /* Makes the text inside the link inherit its color from the parent. */
+    display: flex; /* Uses flexbox to structure the content. */
+    flex-direction: column; /* Stacks the image and title vertically. */
+    height: 100%; /* Ensures the link fills the entire card. */
+}
+
+/* We don't want the link's pseudo-element underline effect on these cards. */
+.project-card a:hover::after {
+    width: 0;
+}
+
+/*
+ * Styles for the image within the project card.
+ */
+.project-card-image img {
+    width: 100%; /* Image fills its container horizontally. */
+    object-fit: cover; /* The image covers the area without distortion. */
+    aspect-ratio: 16 / 10; /* Enforces a consistent widescreen aspect ratio. */
+    filter: saturate(0.5); /* Slightly desaturates the image by default. */
+    transition: filter 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth transition for hover effects. */
+}
+
+/*
+ * Enhances the image on hover for a more dynamic feel.
+ */
+.project-card:hover .project-card-image img {
+    filter: saturate(1); /* Restores full color saturation. */
+    transform: scale(1.05); /* Slightly zooms in on the image. */
+}
+
+/*
+ * Styles for the project title at the bottom of the card.
+ */
+.project-card h3 {
+    padding: 1.5rem; /* Adds spacing around the title. */
+    font-size: 1.5rem;
+    color: var(--color-text); /* Sets the text color. */
+    margin-top: auto; /* Pushes the title to the bottom if the card has extra space. */
+}
+
+/*
+ * =========================================
+ * ANIMATION FIX: FASTER & SMOOTHER IMAGE REVEAL
+ * =========================================
+ * These rules override the global animation to be
+ * faster and more fluid as requested.
+ */
+
+/* The container for the image reveal effect. */
+.image-reveal-container {
+    position: relative; /* Required for the ::after pseudo-element. */
+    overflow: hidden; /* Hides the reveal effect outside the container's bounds. */
+    background-color: var(--color-surface); /* A background prevents flashes of content. */
+}
+
+/* This is the golden overlay that "wipes" across the image. */
+.image-reveal-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-primary); /* The gold color for the wipe. */
+    transform: scaleX(1); /* Starts fully scaled up horizontally (visible). */
+    transform-origin: right; /* The animation will shrink towards the left. */
+    /*
+     * ANIMATION SPEED-UP: The transition duration is reduced from 0.8s to a snappier 0.6s.
+     * The timing function is changed to a custom bezier curve for a smoother "ease-out" effect.
+     */
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* When the container becomes visible, this class is added by JS. */
+.image-reveal-container.visible::after {
+    transform: scaleX(0); /* The wipe animates to be invisible. */
+    transform-origin: left; /* The animation reveals from left to right. */
+    transition-delay: 0.1s; /* A tiny delay to ensure the container is in place first. */
+}
+
+/* The actual image element. */
+.image-reveal-container img {
+    opacity: 0; /* Starts invisible. */
+    transform: scale(1.1); /* Starts slightly zoomed in. */
+    /*
+     * ANIMATION SPEED-UP: The transitions for the image itself are also made faster (0.5s)
+     * and start after a short delay (0.2s) to sync with the wipe animation.
+     */
+    transition: opacity 0.5s ease-out 0.2s, transform 0.5s ease-out 0.2s;
+}
+
+/* When the container is visible, the image fades in and zooms out to normal. */
+.image-reveal-container.visible img {
+    opacity: 1;
+    transform: scale(1);
+}

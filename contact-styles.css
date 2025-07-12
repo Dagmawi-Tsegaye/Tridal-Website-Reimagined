@@ -1,0 +1,166 @@
+/*
+ * =========================================
+ * STYLESHEET FOR: CONTACT PAGE
+ * =========================================
+ * This file contains all specific styles
+ * for the elements on the contact.html page.
+ * =========================================
+ */
+
+/*
+ * The main grid layout for the contact page, creating two columns
+ * for the info text and the form on larger screens.
+ */
+.contact-layout-grid {
+    display: grid; /* Uses grid for a flexible layout. */
+    grid-template-columns: 1fr; /* Defaults to a single column on mobile. */
+    gap: 4rem; /* Defines the space between the info and form sections. */
+    align-items: flex-start; /* Aligns items to the top of the grid. */
+}
+
+/* On screens 992px and wider, switch to a two-column layout. */
+@media (min-width: 992px) {
+    .contact-layout-grid {
+        grid-template-columns: repeat(2, 1fr); /* Two equal-width columns. */
+        align-items: center; /* Vertically centers the content in the columns. */
+    }
+}
+
+/* The main "Let's Create Together." heading. */
+.contact-info .main-title {
+    text-align: left; /* Ensures the title is left-aligned. */
+    margin-bottom: 1rem;
+}
+
+/* Container for the address, phone, and email details. */
+.contact-details {
+    margin-top: 2rem; /* Adds space above the details. */
+    display: flex; /* Uses flexbox to manage layout. */
+    flex-direction: column; /* Stacks the details vertically. */
+    gap: 0.5rem; /* Adds a small space between each detail line. */
+}
+
+/* Styles for each line in the contact details. */
+.contact-details p {
+    margin: 0; /* Removes default paragraph margin. */
+}
+
+/* Wrapper for the form. */
+.contact-form-wrapper {
+    background-color: var(--color-surface); /* Sets a dark background color. */
+    padding: 2.5rem; /* Adds ample spacing inside the form wrapper. */
+    border-radius: 12px; /* Applies rounded corners. */
+    border: 1px solid var(--color-subtle); /* Adds a subtle border. */
+}
+
+/* The "Send a Direct Message" heading. */
+.contact-form-wrapper .form-title {
+    margin-bottom: 2rem; /* Adds space below the title. */
+    text-align: center; /* Centers the title. */
+}
+
+/* A container for each form field (input + error message). */
+.form-group {
+    margin-bottom: 1.5rem; /* Adds space between each form group. */
+}
+
+/* Styles for all text inputs and the textarea. */
+#contactForm input,
+#contactForm textarea {
+    width: 100%; /* Makes form fields span the full width of their container. */
+    padding: 1rem; /* Adds comfortable padding inside the fields. */
+    border: 2px solid var(--color-subtle); /* A subtle default border. */
+    border-radius: 8px; /* Applies rounded corners. */
+    font-size: 1rem;
+    font-family: var(--font-body); /* Ensures the form uses the correct font. */
+    background-color: var(--color-background); /* Darker background for the fields. */
+    color: var(--color-text); /* Light text color. */
+    transition: border-color 0.3s; /* Smooth transition for the border color on focus. */
+}
+
+/* Changes the border color to gold when a field is focused. */
+#contactForm input:focus,
+#contactForm textarea:focus {
+    outline: none; /* Removes the default browser outline. */
+    border-color: var(--color-primary); /* Highlights the active field with the primary color. */
+}
+
+/* Styles for the error messages. */
+.error-message {
+    display: none; /* Hidden by default. Made visible by JavaScript. */
+    color: #ff8a80; /* A soft red color for errors. */
+    font-size: 0.9rem;
+    margin-top: 0.5rem; /* Adds a little space above the message. */
+}
+
+/*
+ * === WOW FACTOR: ANIMATED SUBMIT BUTTON ===
+ */
+
+/* The main button style (from global styles, but listed here for context). */
+.cta-button {
+    width: 100%; /* Makes the button span the full width of the form. */
+    margin-top: 0; /* Resets top margin for this specific button. */
+    position: relative; /* Needed for positioning the icon. */
+    overflow: hidden; /* Keeps the icon animation contained. */
+    transition: background-color 0.4s; /* Smooth color transition. */
+}
+
+/* The container for the button's text content. */
+.cta-button .button-text {
+    display: inline-block; /* Allows transforms on the text. */
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.4s; /* Bouncy transition for the text. */
+}
+
+/* The icon container. */
+.cta-button .button-icon {
+    position: absolute; /* Positions the icon relative to the button. */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 150%); /* Starts below the button, hidden from view. */
+    color: var(--color-background); /* Icon color matches the button text. */
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Bouncy transition. */
+}
+
+/* State 1: When the button is in the process of sending. */
+.cta-button.is-sending .button-text {
+    transform: translateY(-200%); /* The original text slides up and out of view. */
+    opacity: 0;
+}
+.cta-button.is-sending .button-icon {
+    transform: translate(-50%, -50%); /* The icon slides up into the center. */
+    animation: fly-animation 1.2s 0.3s forwards; /* The "fly away" animation starts after a brief delay. */
+}
+
+/* Keyframes for the icon's "fly away" animation. */
+@keyframes fly-animation {
+    0% { transform: translate(-50%, -50%) rotate(0deg); opacity: 1; }
+    100% { transform: translate(200%, -250%) rotate(45deg); opacity: 0; }
+}
+
+/* State 2: When the message has been successfully sent. */
+.cta-button.is-sent {
+    background-color: #4CAF50; /* Changes the button color to green for success. */
+}
+
+
+/*
+ * === MAP SECTION ===
+ */
+
+/* Container for the map. */
+.map-section {
+    padding: 0; /* Removes default section padding. */
+    margin-top: 6rem; /* Adds space above the map. */
+}
+
+/* The map iframe itself. */
+.map-embed {
+    border: 0; /* Removes the default iframe border. */
+    border-radius: 8px; /* Applies rounded corners. */
+    width: 100%;
+    height: 450px;
+    /* MAP FIX: This CSS filter inverts the map colors and turns them grayscale
+       to better match the dark theme of the website. */
+    filter: grayscale(1) invert(1);
+}

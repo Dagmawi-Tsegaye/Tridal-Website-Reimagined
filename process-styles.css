@@ -1,0 +1,154 @@
+/*
+ * =========================================
+ * STYLESHEET FOR: PROCESS PAGE (WOW FACTOR)
+ * =========================================
+ * This file contains interactive and animated
+ * styles for the timeline on process.html.
+ * =========================================
+ */
+
+/*
+ * Main container for the timeline. It holds the track, the animated
+ * progress bar, and all the content items.
+ */
+.timeline {
+    position: relative; /* Establishes positioning context for its children. */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+/*
+ * This is the static, gray track that sits in the background. The animated
+ * progress bar will draw over this element.
+ */
+.timeline-track {
+    position: absolute; /* Positioned relative to the .timeline container. */
+    width: 4px;
+    height: 100%; /* Spans the full height of the timeline section. */
+    background-color: var(--color-surface); /* Dark gray/blue color for the track. */
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%); /* Ensures the track is perfectly centered. */
+    z-index: 1; /* Sits behind the progress bar but above the page background. */
+}
+
+/*
+ * This is the animated, golden line that "draws" itself as the user scrolls.
+ * Its height is controlled by JavaScript.
+ */
+.timeline-progress {
+    position: absolute;
+    width: 4px;
+    height: 0; /* Starts with a height of 0, will be animated by JS. */
+    background-color: var(--color-primary); /* Uses the vibrant primary gold color. */
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2; /* Sits on top of the gray track. */
+    transition: height 0.1s linear; /* A subtle transition to smooth out the height changes from JS. */
+}
+
+/*
+ * Container for each timeline entry. It's initially invisible and
+ * will be revealed by the JavaScript observer.
+ */
+.timeline-container {
+    padding: 10px 40px;
+    position: relative;
+    background-color: inherit;
+    width: 50%;
+    opacity: 0; /* Start fully transparent. */
+    transform: translateY(50px); /* Start slightly shifted down. */
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Smooth fade-in and slide-up transition. */
+}
+
+/*
+ * When the 'is-revealed' class is added by JavaScript, the container
+ * becomes visible and slides into its final position.
+ */
+.timeline-container.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/*
+ * Defines the circular dot for each entry. It starts scaled down to 0.
+ */
+.timeline-container::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background-color: var(--color-background);
+    border: 4px solid var(--color-primary);
+    top: 21px;
+    border-radius: 50%;
+    z-index: 3; /* Sits on top of both the track and the progress bar. */
+    transform: scale(0); /* The dot is invisible by default. */
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* A bouncy "pop" animation. */
+}
+
+/*
+ * When the container is revealed, the dot scales up to its full size.
+ * The transition-delay makes it appear just after the text box slides in.
+ */
+.timeline-container.is-revealed::after {
+    transform: scale(1);
+    transition-delay: 0.2s; /* Creates a slight delay for a polished effect. */
+}
+
+/* === Positioning for Left and Right Containers === */
+
+.timeline-container.left {
+    left: 0;
+}
+
+.timeline-container.right {
+    left: 50%;
+}
+
+.timeline-container.left::after {
+    right: -14px;
+}
+
+.timeline-container.right::after {
+    left: -14px;
+}
+
+/*
+ * The box holding the text content.
+ */
+.timeline-content {
+    padding: 20px 30px;
+    background-color: var(--color-surface);
+    position: relative;
+    border-radius: 6px;
+}
+
+/* === MOBILE RESPONSIVE STYLES === */
+@media (max-width: 768px) {
+    /* On mobile, move the track and progress bar to the left. */
+    .timeline-track,
+    .timeline-progress {
+        left: 31px;
+        transform: translateX(0); /* Reset the horizontal transform. */
+    }
+
+    /* Stack all containers in a single column. */
+    .timeline-container {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+    }
+
+    .timeline-container.right {
+        left: 0%;
+    }
+
+    /* Position all dots on the left-aligned line. */
+    .timeline-container.left::after,
+    .timeline-container.right::after {
+        left: 18px;
+    }
+}
