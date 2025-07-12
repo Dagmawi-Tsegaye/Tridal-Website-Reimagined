@@ -1,4 +1,4 @@
-/* === THE FINAL, POLISHED "BLUEPRINT & LIGHT" STYLESHEET === */
+/* === THE FINAL "BLUEPRINT & LIGHT" OVERHAUL === */
 
 /* === GLOBAL STYLES & CSS VARIABLES === */
 :root {
@@ -70,41 +70,24 @@ nav ul a { color: var(--color-text); font-weight: 600; font-size: 1rem; }
 .image-reveal-container img { opacity: 0; transform: scale(1.2); transition: opacity var(--transition-medium) 0.5s, transform var(--transition-slow) 0.2s; }
 .image-reveal-container.visible img { opacity: 1; transform: scale(1); }
 
-/* === SECTION & COMPONENT STYLES === */
+/* SECTION & COMPONENT STYLES */
 .section-heading { text-align: center; margin-bottom: 4rem; }
-.section-heading h2, .section-heading h1 { font-size: 3rem; position: relative; display: inline-block; }
-.section-heading h2::after, .section-heading h1::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 60px; height: 4px; background-color: var(--color-primary); }
+.section-heading h2 { font-size: 3rem; position: relative; display: inline-block; }
+.section-heading h2::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 60px; height: 4px; background-color: var(--color-primary); }
 
-/* === CARD STYLES (Galleries, News, etc.) === */
-.services-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-.service-card { background: var(--color-surface); border-radius: 12px; overflow: hidden; transition: transform var(--transition-fast), box-shadow var(--transition-fast); border: 1px solid var(--color-subtle); display: flex; flex-direction: column; }
-.service-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-.service-card a { text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%; }
-.service-card a:hover::after { width: 0; }
-.service-card img {
-    width: 100%;
-    object-fit: cover;
-    aspect-ratio: 16 / 10; /* FIX: Enforces consistent shape for card images */
-    filter: saturate(0.5);
-    transition: filter var(--transition-fast), transform var(--transition-fast);
-}
-.service-card:hover img { filter: saturate(1); transform: scale(1.05); }
-.service-card h3 { padding: 1.5rem; font-size: 1.5rem; color: var(--color-text); margin-top: auto; }
-.service-card p { padding: 0 1.5rem 1.5rem 1.5rem; color: var(--color-text); flex-grow: 1; margin: 0; }
-
-/* === HOME: INTERACTIVE SERVICES === */
+/* === HOME: INTERACTIVE SERVICES (FIXED) === */
 .interactive-services { padding: 6rem 1.5rem; }
 .services-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: opacity 0.5s ease-in-out; pointer-events: none; }
 .services-background.is-active { opacity: 0.1; }
 .services-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; position: relative; z-index: 2; }
 @media (min-width: 992px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
 .service-item { background-color: rgba(27, 38, 59, 0.8); backdrop-filter: blur(10px); border: 1px solid var(--color-subtle); padding: 2rem; border-radius: 8px; transition: background-color var(--transition-fast); cursor: pointer; }
-.service-item.is-active { background-color: var(--color-surface); }
 .service-item h3 { color: var(--color-primary); margin-bottom: 1rem; }
 .service-item .service-description { margin: 0; max-height: 0; overflow: hidden; opacity: 0.7; transition: max-height 0.5s ease-out, opacity 0.5s ease-out; }
+.service-item.is-active { background-color: var(--color-surface); }
 .service-item.is-active .service-description { max-height: 200px; opacity: 1; }
 
-/* === HOME: TESTIMONIAL SHOWCASE === */
+/* === HOME: TESTIMONIALS (REDESIGNED) === */
 .testimonial-section { background-color: var(--color-surface); }
 .testimonial-showcase { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
 @media(min-width: 992px) { .testimonial-showcase { grid-template-columns: 300px 1fr; gap: 4rem; } }
@@ -118,28 +101,17 @@ nav ul a { color: var(--color-text); font-weight: 600; font-size: 1rem; }
 .testimonial-quote p:first-of-type { font-size: 1.5rem; font-style: italic; margin-bottom: 1rem; }
 .testimonial-quote h3 { color: var(--color-primary); }
 
-/* === HOME: NEWS (FIXED IMAGE SIZE) === */
+/* === HOME: NEWS (FIXED) === */
 .news-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-.news-item { background: var(--color-surface); border-radius: 8px; overflow: hidden; border: 1px solid var(--color-subtle); display: flex; flex-direction: column; }
-.news-item img {
-    width: 100%;
-    object-fit: cover;
-    aspect-ratio: 16 / 9; /* FIX: Enforces consistent shape for news images */
-}
-.news-item p { padding: 1.5rem; margin: 0; flex-grow: 1; }
+.news-item { background: var(--color-surface); border-radius: 8px; overflow: hidden; border: 1px solid var(--color-subtle); }
+.news-item img { height: 200px; width: 100%; object-fit: cover; }
+.news-item p { padding: 1.5rem; margin: 0; }
 
-/* === ABOUT: OUR PEOPLE (FIXED IMAGE SIZE) === */
-.people-scroller { overflow-x: auto; padding-bottom: 2rem; scrollbar-width: none; } /* Hides scrollbar */
-.people-scroller::-webkit-scrollbar { display: none; } /* Hides scrollbar for Chrome/Safari */
+/* === ABOUT: OUR PEOPLE (REDESIGNED) === */
+.people-scroller { overflow-x: auto; padding-bottom: 2rem; }
 .people-track { display: flex; gap: 2rem; width: max-content; }
 .person-card { flex-shrink: 0; width: 300px; text-align: center; position: relative; overflow: hidden; border-radius: 8px; }
-.person-card img {
-    width: 100%;
-    height: 400px;
-    aspect-ratio: 3 / 4; /* FIX: Enforces consistent portrait shape */
-    object-fit: cover;
-    transition: transform var(--transition-fast);
-}
+.person-card img { width: 100%; height: 400px; object-fit: cover; transition: transform var(--transition-fast); }
 .person-card:hover img { transform: scale(1.05); }
 .person-info { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(13, 27, 42, 0.9)); padding: 4rem 1.5rem 1.5rem 1.5rem; transform: translateY(50%); transition: var(--transition-fast); }
 .person-card:hover .person-info { transform: translateY(0); }
@@ -148,7 +120,7 @@ nav ul a { color: var(--color-text); font-weight: 600; font-size: 1rem; }
 .person-info .bio { max-height: 0; overflow: hidden; transition: var(--transition-fast); color: var(--color-text); font-weight: 400; opacity: 0; }
 .person-card:hover .bio { max-height: 100px; opacity: 1; margin-top: 1rem; }
 
-/* === ABOUT: WORLD MAP === */
+/* === ABOUT: WORLD MAP (REDESIGNED) === */
 .map-container { position: relative; }
 .map-container img { filter: grayscale(1) brightness(0.5); }
 .map-point { position: absolute; width: 20px; height: 20px; background-color: var(--color-primary); border-radius: 50%; cursor: pointer; transition: var(--transition-fast); }
@@ -156,7 +128,7 @@ nav ul a { color: var(--color-text); font-weight: 600; font-size: 1rem; }
 .map-point-info { position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%) scale(0.8); background-color: var(--color-surface); padding: 1rem; border-radius: 8px; width: 250px; text-align: center; opacity: 0; pointer-events: none; transition: var(--transition-fast); }
 .map-point:hover .map-point-info { opacity: 1; transform: translateX(-50%) scale(1); }
 
-/* === PROCESS: TIMELINE (FIXED ALIGNMENT) === */
+/* === PROCESS: TIMELINE (FIXED) === */
 .timeline { position: relative; max-width: 1200px; margin: 0 auto; }
 .timeline::after { content: ''; position: absolute; width: 4px; background-color: var(--color-surface); top: 0; bottom: 0; left: 50%; margin-left: -2px; }
 .timeline-container { padding: 10px 40px; position: relative; background-color: inherit; width: 50%; }
@@ -166,12 +138,15 @@ nav ul a { color: var(--color-text); font-weight: 600; font-size: 1rem; }
 .timeline-container.right::after { left: -12px; }
 .timeline-content { padding: 20px 30px; background-color: var(--color-surface); position: relative; border-radius: 6px; }
 
-/* === CONTACT PAGE === */
+/* === PROJECTS: Animation Fix === */
+/* The base animation is now defined by --transition-slow for smoother results */
+
+/* === CONTACT: Form & Map === */
 .contact-form input, .contact-form textarea { width: 100%; padding: 1rem; margin-bottom: 1.5rem; border: 2px solid var(--color-subtle); border-radius: 8px; font-size: 1rem; background-color: var(--color-surface); color: var(--color-text); transition: border-color 0.3s; }
 .contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: var(--color-primary); }
-.map-embed { border:0; border-radius: 8px; width: 100%; height: 450px; }
+.map-embed { border:0; border-radius: 8px; }
 
-/* PAGE TRANSITIONS & FOOTER */
+/* === PAGE TRANSITIONS & FOOTER === */
 .page-transition { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: var(--color-background); z-index: 9998; transform: scaleY(1); transform-origin: bottom; }
 footer { background-color: var(--color-surface); padding: 4rem 1.5rem 2rem; margin-top: 6rem; border-top: 1px solid var(--color-subtle); text-align: center; }
 .footer-content { display: grid; grid-template-columns: 1fr; gap: 3rem; margin-bottom: 3rem; }
