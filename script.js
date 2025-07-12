@@ -1,68 +1,108 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- GLOBAL DEVICE DETECTION ---
+    // A flag to check if the device is touch-enabled. This helps decide whether to apply tap or hover logic.
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+
     // --- WOW FACTOR: CUSTOM CURSOR (CORRECTED) ---
     const cursor = document.querySelector('.custom-cursor');
-
-    // This is the condition that determines if we should run the cursor logic.
-    // It checks if the primary input method is a "fine" pointer (like a mouse).
     const isFinePointer = window.matchMedia('(pointer: fine)').matches;
 
     if (cursor && isFinePointer) {
-        // This code will now ONLY run on devices with a mouse.
-        
         window.addEventListener('mousemove', e => {
-            // Use requestAnimationFrame for smoother cursor movement.
             requestAnimationFrame(() => {
                 cursor.style.top = `${e.clientY}px`;
                 cursor.style.left = `${e.clientX}px`;
             });
         });
 
-        // Add hover effects for interactive elements.
-        const interactiveElements = 'a, button, .service-item, .portrait, .map-point-dot, .person-card-revised';
+        const interactiveElements = 'a, button, .service-item, .portrait, .map-point-dot, .person-card-revised, .map-point';
         document.querySelectorAll(interactiveElements).forEach(el => {
             el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
             el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
         });
 
     } else if (cursor) {
-        // If it's not a fine pointer (i.e., it's a touch device), hide the cursor element completely.
         cursor.style.display = 'none';
     }
 
 
-    // --- WOW FACTOR: PAGE TRANSITIONS ---
+    // --- MOBILE TAP-TO-ACTIVATE FIX ---
+    // This new block of code makes the hover-based sections work with a single tap on mobile.
+    if (isTouchDevice) {
+        // A function to handle the "tap-once-to-activate, tap-again-to-follow-link" logic.
+        function makeTappable(selector) {
+            const elements = document.querySelectorAll(selector);
+            if (!elements.length) return;
+
+            elements.forEach(element => {
+                element.addEventListener('click', function(e) {
+                    // Check if the element is already active
+                    const wasActive = this.classList.contains('is-active');
+                    
+                    // First, remove 'is-active' from all other elements of the same type
+                    elements.forEach(el => el.classList.remove('is-active'));
+
+                    // If it wasn't already active, make it active and prevent the link from being followed
+                    if (!wasActive) {
+                        this.classList.add('is-active');
+                        e.preventDefault(); // This is key: stops the link on the first tap
+                    }
+                    // If it WAS active, the class is now removed, and the second tap will proceed as a normal link click.
+                });
+            });
+
+            // Add a listener to the document to close active elements when tapping elsewhere
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest(selector)) {
+                    elements.forEach(el => el.classList.remove('is-active'));
+                }
+            });
+        }
+
+        // Apply the tappable logic to all three problematic sections
+        makeTappable('.service-item'); // For "Our Services" on the Home page
+        makeTappable('.person-card-revised'); // For "Our People" on the About page
+        makeTappable('.map-point'); // For "We Work Around the World" on the About page
+    }
+
+
+    // --- EXISTING FUNCTIONALITY (Leave As Is) ---
+    
+    // Page Transitions
     const transitionOverlay = document.querySelector('.page-transition');
     if (transitionOverlay) {
-        // Set the initial state for the transition-in animation.
         transitionOverlay.style.transform = 'scaleY(0)';
         transitionOverlay.style.transformOrigin = 'top';
     }
     document.querySelectorAll('a').forEach(link => {
         const href = link.getAttribute('href');
-        if (!href) return; // Skip links without an href
+        if (!href) return;
         const isLocal = (href.startsWith('/') || href.includes('.html')) && !href.startsWith('#');
         const isNotNewTab = link.getAttribute('target') !== '_blank';
         
         if (isLocal && isNotNewTab) {
             link.addEventListener('click', e => {
+                const parentIsTappable = e.target.closest('.service-item, .person-card-revised, .map-point');
+                if (isTouchDevice && parentIsTappable && !parentIsTappable.classList.contains('is-active')) {
+                    // The makeTappable function already handles preventDefault, so we let it do its job.
+                    return;
+                }
+                
                 e.preventDefault();
                 if (transitionOverlay) {
                     transitionOverlay.style.transform = 'scaleY(1)';
                     transitionOverlay.style.transformOrigin = 'bottom';
-                    // Wait for the animation to complete before navigating.
-                    setTimeout(() => {
-                        window.location = href;
-                    }, 800);
+                    setTimeout(() => { window.location = href; }, 800);
                 } else {
                     window.location = href;
                 }
             });
         }
     });
-    
 
-    // --- ADVANCED SCROLL ANIMATIONS ---
+    // Scroll Animations
     const animatedElements = document.querySelectorAll('.fade-up, .image-reveal-container');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -72,10 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }, { threshold: 0.1 });
-
     animatedElements.forEach(el => observer.observe(el));
-    
-    // Add stagger indexes for staggered animations
+
+    // Stagger Animations
     document.querySelectorAll('.stagger-container').forEach(container => {
         const children = container.querySelectorAll('.fade-up');
         children.forEach((child, index) => {
@@ -83,8 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-
-    // --- ANIMATED HERO TEXT ---
+    // Hero Text Animation
     const heroTitle = document.querySelector('.hero h1');
     if (heroTitle) {
         const text = heroTitle.textContent;
@@ -92,14 +130,13 @@ document.addEventListener('DOMContentLoaded', () => {
         text.split('').forEach((char, index) => {
             const span = document.createElement('span');
             span.className = 'char';
-            span.textContent = char === ' ' ? '\u00A0' : char; // Use non-breaking space
+            span.textContent = char === ' ' ? '\u00A0' : char;
             span.style.animationDelay = `${index * 0.03}s`;
             heroTitle.appendChild(span);
         });
     }
 
-
-    // --- SCROLLED HEADER EFFECT ---
+    // Header Scroll Effect
     const header = document.querySelector('header');
     if (header) {
         window.addEventListener('scroll', () => {
@@ -107,8 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
-    // --- RESPONSIVE NAVIGATION ---
+    // Responsive Navigation (Hamburger Menu)
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('nav ul');
     if (hamburger && navMenu) {
