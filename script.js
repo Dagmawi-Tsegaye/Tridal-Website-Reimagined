@@ -1,15 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Helper function to detect touch devices
-    const isTouchDevice = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    // Helper function to check for a fine pointer (mouse), not just touch capability
+    const hasFinePointer = () => window.matchMedia('(pointer: fine)').matches;
 
-    // --- WOW FACTOR: CUSTOM CURSOR ---
+    // --- WOW FACTOR: CUSTOM CURSOR (REVISED FIX) ---
     const cursor = document.querySelector('.custom-cursor');
     if (cursor) {
-        // Disable custom cursor on touch devices for better performance and usability
-        if (isTouchDevice()) {
-            cursor.style.display = 'none';
-        } else {
+        // Only initialize the cursor if the device has a mouse/fine pointer.
+        if (hasFinePointer()) {
             window.addEventListener('mousemove', e => {
                 cursor.style.top = e.clientY + 'px';
                 cursor.style.left = e.clientX + 'px';
@@ -18,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
                 el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
             });
+        } else {
+            // If it's a touch-only device (phone/tablet), hide the cursor element.
+            cursor.style.display = 'none';
         }
     }
 
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
-    
+
     // --- ADVANCED SCROLL ANIMATIONS ---
     const animatedElements = document.querySelectorAll('.fade-up, .image-reveal-container, .timeline-container, .gallery-item');
     const observer = new IntersectionObserver((entries) => {
@@ -101,14 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
             
-            if (isTouchDevice()) {
+            if (!hasFinePointer()) {
                 // On touch devices, use a click to toggle the active state.
                 item.addEventListener('click', () => {
                     const wasActive = item.classList.contains('is-active');
-                    // Deactivate all first
                     serviceItems.forEach(i => i.classList.remove('is-active'));
                     serviceBackgrounds.forEach(bg => bg.classList.remove('is-active'));
-                    // If it wasn't already active, make it active
                     if (!wasActive) {
                        activateService();
                     }
@@ -120,8 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- HOME: TESTIMONIAL SHOWCASE (REDESIGNED) ---
-    // This already used 'click', so no changes were needed. It's safe for mobile.
+    // --- HOME: TESTIMONIAL SHOWCASE ---
     const portraits = document.querySelectorAll('.portrait');
     const quotes = document.querySelectorAll('.testimonial-quote');
     if (portraits.length > 0 && quotes.length > 0) {
@@ -138,8 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // --- ABOUT PAGE: MOBILE FIX FOR CSS HOVER EFFECTS ---
-    // This new block adds 'click' functionality for elements that only used ':hover' in CSS.
-    if (isTouchDevice() && document.getElementById('about-our-people')) {
+    if (!hasFinePointer() && document.getElementById('about-our-people')) {
         const peopleCards = document.querySelectorAll('.person-card-revised');
         const mapPoints = document.querySelectorAll('.map-point-revised');
         const tappableElements = [...peopleCards, ...mapPoints];
@@ -154,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tappableElements.forEach(el => {
             el.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent the body click listener from firing
+                e.stopPropagation();
                 const wasTapped = el.classList.contains('is-tapped');
                 closeAllTapped(el);
                 if (!wasTapped) {
@@ -163,13 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Add a listener to the whole document to close tapped elements when clicking away
         document.addEventListener('click', () => closeAllTapped(null));
     }
-
-
-    // --- CONTACT FORM VALIDATION ---
-    // This section was split into its own `contact-script.js` file in your project.
-    // The original logic in this file is redundant. I've left it out to avoid conflicts.
-    // The existing contact-script.js will handle the contact form correctly.
 });
