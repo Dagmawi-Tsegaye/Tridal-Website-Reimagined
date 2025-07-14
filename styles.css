@@ -155,8 +155,7 @@ footer { background-color: var(--color-surface); padding: 4rem 1.5rem 2rem; marg
 
 /* RESPONSIVE STYLES */
 @media (max-width: 768px) {
-    .custom-cursor { display: none; }
-    body { cursor: auto; }
+ 
     .hamburger { display: block; cursor: pointer; background: none; border: none; z-index: 1001; }
     .hamburger .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: var(--color-text); transition: all 0.3s ease-in-out; }
     nav ul { position: fixed; top: 0; right: -100%; width: min(75%, 300px); height: 100vh; background: var(--color-surface); flex-direction: column; justify-content: center; align-items: center; gap: 2rem; transition: right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
