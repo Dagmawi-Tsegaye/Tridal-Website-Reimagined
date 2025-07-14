@@ -1,17 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Helper function to detect touch devices
+    const isTouchDevice = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
     // --- WOW FACTOR: CUSTOM CURSOR ---
     const cursor = document.querySelector('.custom-cursor');
     if (cursor) {
-        if ('ontouchstart' in window) { cursor.style.display = 'none'; }
-        window.addEventListener('mousemove', e => {
-            cursor.style.top = e.clientY + 'px';
-            cursor.style.left = e.clientX + 'px';
-        });
-        document.querySelectorAll('a, button, .service-item, .portrait, .map-point').forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-        });
+        // Disable custom cursor on touch devices for better performance and usability
+        if (isTouchDevice()) {
+            cursor.style.display = 'none';
+        } else {
+            window.addEventListener('mousemove', e => {
+                cursor.style.top = e.clientY + 'px';
+                cursor.style.left = e.clientX + 'px';
+            });
+            document.querySelectorAll('a, button, .service-item, .portrait, .map-point-revised, .person-card-revised').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+        }
     }
 
     // --- WOW FACTOR: PAGE TRANSITIONS ---
@@ -80,23 +87,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- HOME: INTERACTIVE SERVICES (FIXED) ---
+    // --- HOME: INTERACTIVE SERVICES (FIXED FOR MOBILE) ---
     const serviceItems = document.querySelectorAll('.service-item');
     const serviceBackgrounds = document.querySelectorAll('.services-background');
     if(serviceItems.length > 0 && serviceBackgrounds.length > 0) {
         serviceItems.forEach((item, index) => {
-            item.addEventListener('mouseenter', () => {
+            const activateService = () => {
                 serviceItems.forEach(i => i.classList.remove('is-active'));
                 serviceBackgrounds.forEach(bg => bg.classList.remove('is-active'));
                 item.classList.add('is-active');
                 if(serviceBackgrounds[index]) {
                     serviceBackgrounds[index].classList.add('is-active');
                 }
-            });
+            };
+            
+            if (isTouchDevice()) {
+                // On touch devices, use a click to toggle the active state.
+                item.addEventListener('click', () => {
+                    const wasActive = item.classList.contains('is-active');
+                    // Deactivate all first
+                    serviceItems.forEach(i => i.classList.remove('is-active'));
+                    serviceBackgrounds.forEach(bg => bg.classList.remove('is-active'));
+                    // If it wasn't already active, make it active
+                    if (!wasActive) {
+                       activateService();
+                    }
+                });
+            } else {
+                // On desktop, keep the original mouseenter behavior.
+                item.addEventListener('mouseenter', activateService);
+            }
         });
     }
 
     // --- HOME: TESTIMONIAL SHOWCASE (REDESIGNED) ---
+    // This already used 'click', so no changes were needed. It's safe for mobile.
     const portraits = document.querySelectorAll('.portrait');
     const quotes = document.querySelectorAll('.testimonial-quote');
     if (portraits.length > 0 && quotes.length > 0) {
@@ -111,29 +136,40 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+    
+    // --- ABOUT PAGE: MOBILE FIX FOR CSS HOVER EFFECTS ---
+    // This new block adds 'click' functionality for elements that only used ':hover' in CSS.
+    if (isTouchDevice() && document.getElementById('about-our-people')) {
+        const peopleCards = document.querySelectorAll('.person-card-revised');
+        const mapPoints = document.querySelectorAll('.map-point-revised');
+        const tappableElements = [...peopleCards, ...mapPoints];
+
+        const closeAllTapped = (exceptThisOne) => {
+            tappableElements.forEach(el => {
+                if (el !== exceptThisOne) {
+                    el.classList.remove('is-tapped');
+                }
+            });
+        };
+
+        tappableElements.forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent the body click listener from firing
+                const wasTapped = el.classList.contains('is-tapped');
+                closeAllTapped(el);
+                if (!wasTapped) {
+                    el.classList.add('is-tapped');
+                }
+            });
+        });
+
+        // Add a listener to the whole document to close tapped elements when clicking away
+        document.addEventListener('click', () => closeAllTapped(null));
+    }
+
 
     // --- CONTACT FORM VALIDATION ---
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const isNameValid = validateField('name', 'name-error', val => val.trim() !== '');
-            const isEmailValid = validateField('email', 'email-error', val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val));
-            const isSubjectValid = validateField('subject', 'subject-error', val => val.trim() !== '');
-            const isMessageValid = validateField('message', 'message-error', val => val.trim().length >= 20);
-            if (isNameValid && isEmailValid && isSubjectValid && isMessageValid) {
-                alert('Thank you for your message! It has been sent.');
-                contactForm.submit();
-            }
-        });
-        function validateField(fieldId, errorId, validationFn) {
-            const field = document.getElementById(fieldId);
-            const error = document.getElementById(errorId);
-            if (!field) return false;
-            const isValid = validationFn(field.value);
-            if (error) { error.style.display = isValid ? 'none' : 'block'; }
-            field.style.borderColor = isValid ? 'var(--color-subtle)' : 'var(--color-primary)';
-            return isValid;
-        }
-    }
+    // This section was split into its own `contact-script.js` file in your project.
+    // The original logic in this file is redundant. I've left it out to avoid conflicts.
+    // The existing contact-script.js will handle the contact form correctly.
 });
