@@ -340,7 +340,40 @@
     line-height: 1.4; /* Improves readability. */
     color: var(--color-text); /* Sets the text color. */
 }
+/*
+ * =========================================
+ * MOBILE COMPATIBILITY FIX
+ * =========================================
+ * This code makes the hover-based elements
+ * interactive on touch devices by responding
+ * to a '.is-tapped' class added by JavaScript.
+ * =========================================
+ */
 
+/* --- "Our People" Card Tap Fix --- */
+
+.person-card-revised.is-tapped img {
+    transform: scale(1.1);
+}
+
+.person-card-revised.is-tapped .person-info-overlay {
+    opacity: 1;
+}
+
+.person-card-revised.is-tapped h3,
+.person-card-revised.is-tapped .role,
+.person-card-revised.is-tapped .bio {
+    transform: translateY(0);
+}
+
+
+/* --- World Map Point Tap Fix --- */
+
+.map-point-revised.is-tapped .map-point-info-revised {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    pointer-events: auto;
+}
 /*
  * Styles the location name (e.g., "New York, USA") to make it stand out.
  */
