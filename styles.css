@@ -53,28 +53,46 @@ nav ul a { color: var(--color-text); font-weight: 600; font-size: 1rem; }
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center; /* New: Centers the content horizontally */
+  justify-content: center;
   background-image: linear-gradient(rgba(13, 27, 42, 0.8), rgba(13, 27, 42, 0.8)), url('Home/main.jpg');
   background-size: cover;
   background-position: center;
 }
 
-.hero-content { /* New class for the inner content container */
-  max-width: 800px; /* Limits the width for better readability */
-  padding: 0 2rem; /* Adds some padding on the sides for smaller screens */
-  text-align: center; /* New: Centers the text within this container */
-  color: white; /* Add a white color for better contrast with the dark background */
+.hero-content {
+  max-width: 800px;
+  padding: 0 2rem;
+  text-align: center;
+  color: #fff;
 }
 
 .hero h1 {
   font-weight: 900;
-  font-size: 4rem; /* Optional: Make the font size larger */
-  margin-bottom: 1rem; /* Optional: Add space below the heading */
+  font-size: 4.5rem; /* Adjust as needed */
+  line-height: 1.2;
+  margin-bottom: 1rem; /* Space below the heading */
+  display: flex; /* Makes it a flex container */
+  flex-direction: column; /* Stacks the words by default (for mobile) */
+  justify-content: center; /* Centers items horizontally if space allows */
+  align-items: center; /* Centers items vertically if space allows */
+}
+
+/* Styles for the individual words */
+.hero h1 span {
+  white-space: nowrap; /* Prevents words from breaking onto multiple lines */
+}
+
+/* Media query for tablets and larger screens */
+@media (min-width: 768px) {
+  .hero h1 {
+    flex-direction: row; /* Arranges words side-by-side */
+    gap: 1.5rem; /* Adds space between the words */
+  }
 }
 
 .hero p {
-  font-size: 1.25rem; /* Optional: Make the paragraph text larger */
-  line-height: 1.6; /* Optional: Improve readability with more line height */
+  font-size: 1.25rem;
+  line-height: 1.6;
 }
 
 .hero .char { display: inline-block; transform: translateY(110%); animation: text-reveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
@@ -195,5 +213,6 @@ footer { background-color: var(--color-surface); padding: 4rem 1.5rem 2rem; marg
     .timeline-container.right { left: 0%; }
     .timeline-container.left::after, .timeline-container.right::after { left: 15px; }
 }
+
 
 
