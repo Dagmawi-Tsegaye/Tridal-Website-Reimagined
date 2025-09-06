@@ -61,8 +61,8 @@ nav ul a { color: var(--color-text); font-weight: 600; font-size: 1rem; }
 
 .hero-content {
   max-width: 800px;
-  padding: 0 2rem;
-  text-align: center;
+  padding: 2 2rem;
+  text-align: left;
   color: #fff;
 }
 
@@ -70,14 +70,9 @@ nav ul a { color: var(--color-text); font-weight: 600; font-size: 1rem; }
   font-weight: 900;
   font-size: 2.5rem;
   line-height: 1.2;
+margin-top:100px;
 }
 
-/* Hide the line break on screens larger than 768px */
-@media (min-width: 768px) {
-  .mobile-break {
-    display: none;
-  }
-}
 
 .hero p {
   font-size: 1.25rem;
@@ -215,6 +210,7 @@ footer { background-color: var(--color-surface); padding: 4rem 1.5rem 2rem; marg
     .timeline-container.right { left: 0%; }
     .timeline-container.left::after, .timeline-container.right::after { left: 15px; }
 }
+
 
 
 
