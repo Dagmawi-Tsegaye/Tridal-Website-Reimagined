@@ -50,7 +50,7 @@ nav ul a { color: var(--color-text); font-weight: 600; font-size: 1rem; }
 
 /* HERO SECTION */
 .hero { min-height: 100vh; display: flex; align-items: center; background-image: linear-gradient(rgba(13, 27, 42, 0.8), rgba(13, 27, 42, 0.8)), url('Home/main.jpg'); background-size: cover; background-position: center; text-align: left; }
-.hero h1 { font-weight: 900; overflow: hidden; display:flex;  }
+.hero h1 { font-weight: 900;  }
 
 .hero .char { display: inline-block; transform: translateY(110%); animation: text-reveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 @keyframes text-reveal { to { transform: translateY(0); } }
@@ -170,3 +170,4 @@ footer { background-color: var(--color-surface); padding: 4rem 1.5rem 2rem; marg
     .timeline-container.right { left: 0%; }
     .timeline-container.left::after, .timeline-container.right::after { left: 15px; }
 }
+
