@@ -3,17 +3,22 @@
 /* === GLOBAL STYLES & CSS VARIABLES === */
 :root {
     --color-background: #0D1B2A; /* Midnight Blue */
-    --color-text: #E0E1DD;       /* Light Cream */
-    --color-primary: #FCA311;   /* Electric Gold */
-    --color-surface: #1B263B;    /* Darker Blue Surface */
-    --color-subtle: #415A77;     /* Muted Blue/Gray */
+    --color-text: #E0E1DD;  /* Light Cream */
+    --color-primary: #FCA311; /* Electric Gold */
+    --color-surface: #1B263B; /* Darker Blue Surface */
+    --color-subtle: #415A77; /* Muted Blue/Gray */
+
+    /* The new fonts from the redesigned hero section */
     --font-heading: 'Montserrat', sans-serif;
     --font-body: 'Source Sans Pro', sans-serif;
+    
+    /* Re-adding a more elegant font for the hero title specifically */
+    --font-hero-title: 'Playfair Display', serif;
 
     /* Animations are now faster and smoother */
     --transition-fast: 0.3s ease-in-out;
     --transition-medium: 0.5s ease-in-out;
-    --transition-slow: 0.6s ease-in-out; 
+    --transition-slow: 0.6s ease-in-out;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,53 +53,46 @@ nav ul { list-style: none; display: flex; gap: 2rem; }
 nav ul a { color: var(--color-text); font-weight: 600; font-size: 1rem; }
 .hamburger { display: none; }
 
-/* HERO SECTION */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: left;
-  justify-content: center;
-  background-image: linear-gradient(rgba(13, 27, 42, 0.8), rgba(13, 27, 42, 0.8)), url('Home/main.jpg');
-  background-size: cover;
-  background-position: center;
+/* --- REIMAGINED HERO SECTION (REPLACING THE OLD HERO STYLES) --- */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--color-text);
+    background-image: linear-gradient(
+        rgba(13, 27, 42, 0.8),
+        rgba(13, 27, 42, 0.8)
+    ),
+    url('Home/main.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
 .hero-content {
-  max-width: 800px;
-  padding: 2 2rem;
-  text-align: left;
-  color: #fff;
+    max-width: 800px;
+    padding: 2rem;
+    z-index: 1; /* Ensures content is above the background */
 }
 
-.hero h1 {
-  font-weight: 900;
-  font-size: 2.5rem;
-  line-height: 1.2;
-margin-top:100px;
+.hero-title {
+    font-family: var(--font-hero-title); /* Use the new elegant font */
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
 }
 
-
-.hero p {
-  font-size: 1.25rem;
-  line-height: 1.6;
+.hero-subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 2rem;
 }
 
-/* Media query for tablets and larger screens */
-@media (min-width: 768px) {
-  .hero h1 {
-    flex-direction: row; /* Arranges words side-by-side */
-    gap: 1.5rem; /* Adds space between the words */
-  }
-}
-
-.hero p {
-  font-size: 1.25rem;
-  line-height: 1.6;
-}
-
-.hero .char { display: inline-block; transform: translateY(110%); animation: text-reveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-@keyframes text-reveal { to { transform: translateY(0); } }
-.hero p { font-size: 1.2rem; max-width: 50ch; margin-top: 1rem; }
 
 /* BUTTONS */
 .cta-button { display: inline-block; background-color: var(--color-primary); color: var(--color-background) !important; padding: 0.8rem 2.5rem; border-radius: 50px; font-size: 1.1rem; font-weight: bold; text-decoration: none; transition: transform var(--transition-fast), box-shadow var(--transition-fast); margin-top: 2rem; }
@@ -196,7 +194,6 @@ footer { background-color: var(--color-surface); padding: 4rem 1.5rem 2rem; marg
 
 /* RESPONSIVE STYLES */
 @media (max-width: 768px) {
- 
     .hamburger { display: block; cursor: pointer; background: none; border: none; z-index: 1001; }
     .hamburger .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: var(--color-text); transition: all 0.3s ease-in-out; }
     nav ul { position: fixed; top: 0; right: -100%; width: min(75%, 300px); height: 100vh; background: var(--color-surface); flex-direction: column; justify-content: center; align-items: center; gap: 2rem; transition: right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
@@ -209,11 +206,22 @@ footer { background-color: var(--color-surface); padding: 4rem 1.5rem 2rem; marg
     .timeline-container { width: 100%; padding-left: 70px; padding-right: 25px; }
     .timeline-container.right { left: 0%; }
     .timeline-container.left::after, .timeline-container.right::after { left: 15px; }
+
+    /* Mobile Hero Section Adjustments */
+    .hero-section {
+        align-items: center; /* keep content centered */
+        text-align: center;
+    }
+    .hero-content {
+        padding: 1.5rem;
+    }
 }
 
-
-
-
-
-
-
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: clamp(2rem, 8vw, 3rem);
+    }
+    .hero-subtitle {
+        font-size: clamp(0.9rem, 3vw, 1.1rem);
+    }
+}
